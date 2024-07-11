@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const spreadsheetId = '1dRpApSjAGXtp_zC2yPUv5NVDJtpSRprnkT5unqvByGc'; // Google Spreadsheet ID
-    const range = 'B6:K492'; // Sheet Data Range
+    const range = 'B7:K492'; // Sheet Data Range
     const apiKey = 'AIzaSyBupy8KeQfg3pi_-ypaQ14hiMBzKFjQss0'; // Google Sheets API key
 
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const mapItem = document.createElement('div');
                 mapItem.classList.add('map-item');
                 mapItem.innerHTML = `
-                    <strong>${mapName}</strong> - Difficulty: ${mapDifficulty}<br>
+                    <strong>${mapName}</strong> - Star Rating: ${mapDifficulty}<br>
                     Created by: ${mapCreator}
                 `;
 
