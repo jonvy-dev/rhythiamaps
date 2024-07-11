@@ -11,10 +11,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const rows = data.values;
             const mapsList = document.getElementById('maps-list');
 
+            // Assuming map names are in column 3 (index 2), creators in column 5 (index 4), difficulties in column 6 (index 5)
             rows.forEach(row => {
-                const mapName = row[1]; // Map name row in sheet
-                const mapRating = row[4]; // SR row in sheet
-                const mapCreator = row[3]; // Mappers row in sheet
+                const mapName = row[1]; // Column C (index 2)
+                const mapCreator = row[3]; // Column E (index 4)
+                const mapDifficulty = row[4]; // Column F (index 5)
 
                 const mapItem = document.createElement('div');
                 mapItem.classList.add('map-item');
