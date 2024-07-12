@@ -44,32 +44,33 @@ document.addEventListener('DOMContentLoaded', function() {
             return false; // Exclude rows where mapName is undefined or not a string
         });
 
-        // Display filtered results
-        filteredRows.forEach(row => {
-            const mapName = row[1]; // Column C (index 1)
-            const mapCreator = row[3]; // Column E (index 3)
-            const mapDifficulty = row[4]; // Column F (index 4)
-            const downloadLink = row[6]; // Column H (index 6)
+        // Display filtered results or hide filtered list if query is empty
+        if (query.length > 0) {
+            filteredMapsList.style.display = 'block'; // Show filtered list
+            filteredRows.forEach(row => {
+                const mapName = row[1]; // Column C (index 1)
+                const mapCreator = row[3]; // Column E (index 3)
+                const mapDifficulty = row[4]; // Column F (index 4)
+                const downloadLink = row[6]; // Column H (index 6)
 
-            const mapItem = document.createElement('li');
-            mapItem.classList.add('filtered-map-item');
-            mapItem.innerHTML = `
-                <a href="${downloadLink}" target="_blank"><strong>${mapName}</strong></a> • Star Rating: ${mapDifficulty}<br>
-                Created by: ${mapCreator}
-            `;
+                const mapItem = document.createElement('li');
+                mapItem.classList.add('filtered-map-item');
+                mapItem.innerHTML = `
+                    <a href="${downloadLink}" target="_blank"><strong>${mapName}</strong></a> • Star Rating: ${mapDifficulty}<br>
+                    Created by: ${mapCreator}
+                `;
 
-            filteredMapsList.appendChild(mapItem);
-        });
+                filteredMapsList.appendChild(mapItem);
+            });
+        } else {
+            filteredMapsList.style.display = 'none'; // Hide filtered list
+        }
     }
 
     // Event listener for search input changes
     searchInput.addEventListener('input', function() {
         const query = this.value.trim();
-        if (query.length > 0) {
-            filterMaps(query, allRows); // Filter using allRows data
-        } else {
-            filteredMapsList.innerHTML = ''; // Clear the filtered list if search input is empty
-        }
+        filterMaps(query, allRows); // Filter using allRows data
     });
 
     // Fetch data from Google Sheets
@@ -79,9 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const rows = data.values;
             populateMapsList(rows); // Populate original maps list
             allRows = rows; // Store all rows for filtering
-
-            // Optional: Initialize filtered list with all maps on page load
-            filterMaps('', rows);
         })
         .catch(error => console.error('Error fetching data:', error));
 });
