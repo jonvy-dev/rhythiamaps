@@ -9,22 +9,38 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             const rows = data.values;
-            const mapsList = document.getElementById('maps-list');
-            const searchInput = document.getElementById('search-input');
+            const mapsListContainer = document.getElementById('maps-list');
             const filteredMapsList = document.getElementById('filtered-maps-list');
+            const searchInput = document.getElementById('search-input');
+
+            // Function to populate original maps list
+            function populateMapsList() {
+                mapsListContainer.innerHTML = ''; // Clear previous content
+                rows.forEach(row => {
+                    const mapName = row[1]; // Column C (index 1)
+                    const mapCreator = row[3]; // Column E (index 3)
+                    const mapDifficulty = row[4]; // Column F (index 4)
+                    const downloadLink = row[6]; // Column H (index 6)
+
+                    const mapItem = document.createElement('div');
+                    mapItem.classList.add('map-item');
+                    mapItem.innerHTML = `
+                        <a href="${downloadLink}" target="_blank"><strong>${mapName}</strong></a> • Star Rating: ${mapDifficulty}<br>
+                        Created by: ${mapCreator}
+                    `;
+
+                    mapsListContainer.appendChild(mapItem);
+                });
+            }
 
             // Function to filter maps based on search input
             function filterMaps(query) {
-                // Clear previous results
-                filteredMapsList.innerHTML = '';
-
-                // Filter rows based on mapName
+                filteredMapsList.innerHTML = ''; // Clear previous results
                 const filteredRows = rows.filter(row => {
                     const mapName = row[1].toLowerCase(); // Column C (index 1)
                     return mapName.includes(query.toLowerCase());
                 });
 
-                // Display filtered results
                 filteredRows.forEach(row => {
                     const mapName = row[1]; // Column C (index 1)
                     const mapCreator = row[3]; // Column E (index 3)
@@ -32,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const downloadLink = row[6]; // Column H (index 6)
 
                     const mapItem = document.createElement('li');
-                    mapItem.classList.add('map-item');
+                    mapItem.classList.add('filtered-map-item');
                     mapItem.innerHTML = `
                         <a href="${downloadLink}" target="_blank"><strong>${mapName}</strong></a> • Star Rating: ${mapDifficulty}<br>
                         Created by: ${mapCreator}
@@ -52,8 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-            // Initially load all maps on page load
-            filterMaps('');
+            // Initially populate the maps list on page load
+            populateMapsList();
 
         })
         .catch(error => console.error('Error fetching data:', error));
